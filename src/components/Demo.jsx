@@ -103,7 +103,7 @@ function Demo() {
           <img src={loader} alt="loader" className="w-20 h-20 object-contain" />
         ) : error ? (
           <p className="font-inter font-bold text-black text-center">
-            It wasn't supposed to happen...
+            Something went wrong...
             <br />
             Please, try again later!
           </p>
