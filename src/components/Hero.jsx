@@ -17,7 +17,7 @@ function Hero() {
 			</h1>
 
 			<h2 className="desc">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur, ad incidunt repellat esse earum velit praesentium vitae odio nisi minima distinctio commodi quod deserunt excepturi explicabo sit, assumenda illo quisquam!
+				You don't have to read long texts to get the summary anymore! <br /> Quickly and efficiently analyze and summarize any text and get a concise and accurate summary in just seconds.
 			</h2>
 		</header>
   );
