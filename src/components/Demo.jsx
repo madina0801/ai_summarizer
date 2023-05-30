@@ -9,6 +9,8 @@ function Demo() {
   });
 
   const [allArticles, setAllArticles] = useState([]);
+  const [copied, setCopied] = useState("");
+
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
       localStorage.getItem("articles")
@@ -31,9 +33,15 @@ function Demo() {
 
       setArticle(newArticle);
       setAllArticles(updatedAllAtricles);
-      localStorage.setItem(JSON.stringify(updatedAllAtricles));
+      localStorage.setItem("articles", JSON.stringify(updatedAllAtricles));
     }
   };
+
+  const handleCopy = (copyUrl) => {
+		setCopied(copyUrl);
+		navigator.clipboard.writeText(copyUrl);
+		setTimeout(() => setCopied(false), 3000); 
+	};
 
   return (
     <section className="mt-16 w-full max-w-xl">
@@ -66,40 +74,54 @@ function Demo() {
         </form>
 
         {/* Browse URL History */}
-				<div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
-					{allArticles.map((item, index) => (
-						<div key={`link-${index}`} onClick={() => setAtricle(item)} className="link_card">
-							<div className="copy_btn">
-								<img src={copy} alt="copy_icon" className="w-[40%] object-contain" />
-							</div>
+        <div className="flex flex-col gap-1 max-h-60 overflow-y-auto">
+          {allArticles.map((item, index) => (
+            <div
+              key={`link-${index}`}
+              onClick={() => setArticle(item)}
+              className="link_card"
+            >
+              <div className="copy_btn" onClick={() => handleCopy(item.url)}>
+                <img
+                  src={copied === item.url ? tick : copy}
+                  alt="copy_icon"
+                  className="w-[40%] object-contain"
+                />
+              </div>
 
-							<p className="flex-1 font-satoshi text-blue-700 font-medium text-sm truncate">{item.url}</p>
-						</div>
-					))}
-				</div>
+              <p className="flex-1 font-satoshi text-blue-700 font-medium text-sm truncate">
+                {item.url}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Display results */}
-			<div
-			className="my-10 max-w-full flex justify-center items-center">
-				{ isFetching ? (
-					<img src={loader} alt="loader" className="w-20 h-20 object-contain" />
-				) : error ? (
-					<p className="font-inter font-bold text-black text-center">It wasn't supposed to happen...
-					<br />Please, try again later!</p>
-				) : (
-					article.summary && (
-						<div className="flex flex-col gap-3">
-							<h2 className="font-satoshi font-bold text-gray-600 text-xl">
-								Article <span className="blue_gradient">Summary</span>
-							</h2>
-							<div className="summary_box">
-								<p>{article.summary}</p>
-							</div>
-						</div>
-					)
-				)}
-			</div>
+      <div className="my-10 max-w-full flex justify-center items-center">
+        {isFetching ? (
+          <img src={loader} alt="loader" className="w-20 h-20 object-contain" />
+        ) : error ? (
+          <p className="font-inter font-bold text-black text-center">
+            It wasn't supposed to happen...
+            <br />
+            Please, try again later!
+          </p>
+        ) : (
+          article.summary && (
+            <div className="flex flex-col gap-3">
+              <h2 className="font-satoshi font-bold text-gray-600 text-xl">
+                Article <span className="blue_gradient">Summary</span>
+              </h2>
+              <div className="summary_box">
+                <p className="font-inter font-medium text-sm text-gray-700">
+                  {article.summary}
+                </p>
+              </div>
+            </div>
+          )
+        )}
+      </div>
     </section>
   );
 }
